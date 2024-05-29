@@ -1,0 +1,170 @@
+<mvc:View controllerName="tbspl.worklist.controller.List"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+
+        <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+							<fb:filterGroupItems>
+								<fb:FilterGroupItem name="Name" label="Name" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox
+											name="Name"
+											selectionChange=".onSelectionChange"
+											items="{
+												path: '/ProductNames',
+												templateShareable: true
+											}"
+										>
+											<core:Item key="{key}" text="{name}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem name="Category" label="Category" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox
+											name="Category"
+											selectionChange=".onSelectionChange"
+											items="{
+												path: '/ProductCategories',
+												templateShareable: true
+											}"
+										>
+											<core:Item key="{key}" text="{name}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+								<fb:FilterGroupItem name="SupplierName" label="SupplierName" groupName="Group1" visibleInFilterBar="true">
+									<fb:control>
+										<MultiComboBox
+											name="SupplierName"
+											selectionChange=".onSelectionChange"
+											items="{
+												path: '/ProductSuppliers',
+												templateShareable: true
+											}"
+										>
+											<core:Item key="{key}" text="{name}"/>
+										</MultiComboBox>
+									</fb:control>
+								</fb:FilterGroupItem>
+							</fb:filterGroupItems>
+						</fb:FilterBar>
+
+
+            <IconTabBar
+		id="idIconTabBar"
+		select=".onFilterSelect"
+		class="sapUiResponsiveContentPadding">
+		<items>
+			<IconTabFilter
+				showAll="true"
+				count="36"
+				text="Plannings"
+				key="All" />
+			<IconTabSeparator />
+            <IconTabFilter
+				icon="sap-icon://inventory"
+				iconColor="Negative"
+				count="4"
+				text="Pending"
+				key="Pending" />
+            <IconTabSeparator icon="sap-icon://open-command-field" />
+			<IconTabFilter
+				icon="sap-icon://begin"
+				iconColor="Positive"
+				count="20"
+				text="KAM Approved"
+				key="KAMApproved" />
+            <IconTabSeparator icon="sap-icon://open-command-field" />
+			<IconTabFilter
+				icon="sap-icon://compare"
+				iconColor="Critical"
+				count="12"
+				text="RSM Approved"
+				key="RSMApproved" />
+			
+		</items>
+		<content>
+			<Table
+				id="productsTable"
+				inset="false"
+				showSeparators="Inner"
+				headerText="Products"
+				items="{
+					path: '/ProductCollection',
+					sorter: {
+						path: 'Name'
+					}
+				}">
+				<infoToolbar>
+					<OverflowToolbar>
+						<Label text="Wide range of available products"/>
+					</OverflowToolbar>
+				</infoToolbar>
+				<columns>
+					<Column
+						width="12em">
+						<Text text="Product" />
+					</Column>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true">
+						<Text text="Supplier" />
+					</Column>
+					<Column
+						minScreenWidth="Desktop"
+						demandPopin="true"
+						hAlign="End">
+						<Text text="Dimensions" />
+					</Column>
+					<Column
+						minScreenWidth="Desktop"
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="Weight" />
+					</Column>
+					<Column
+						hAlign="End">
+						<Text text="Price" />
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier
+								title="{Name}"
+								text="{ProductId}"/>
+							<Text
+								text="{SupplierName}" />
+							<Text
+								text="{Width} x {Depth} x {Height} {DimUnit}" />
+							<ObjectNumber
+								number="{WeightMeasure}"
+								unit="{WeightUnit}"
+								state="{
+									parts: [
+										{path: 'WeightMeasure'},
+										{path: 'WeightUnit'}
+									],
+									formatter: '.formatter.weightState'
+								}" />
+							<ObjectNumber
+									number="{
+										parts:[{path:'Price'},{path:'CurrencyCode'}],
+										type: 'sap.ui.model.type.Currency',
+										formatOptions: {showMeasure: false}
+									}"
+									unit="{CurrencyCode}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</IconTabBar>
+
+        </content>
+    </Page>
+</mvc:View>
